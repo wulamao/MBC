@@ -43,6 +43,16 @@ ApplicationWindow {
             }
             chbDebug.onCheckStateChanged: {
             }
+            txtInputSample.onTextChanged: {
+                var sampleTime = Number(configView.txtInputSample.text)
+                if(sampleTime>=500 || sampleTime<=10000) {
+                    timer.stop()
+                    timer.interval = sampleTime
+                    timer.start()
+                } else {
+                    console.log("illegal time")
+                }
+            }
         }
     }
 
@@ -72,10 +82,6 @@ ApplicationWindow {
             running: true
             triggeredOnStart: false
             onTriggered: {
-                var sampleTime = Number(configView.txtInputSample.text)
-                if(sampleTime>100 || sampleTime<10000)
-                    timer.interval = sampleTime
-
                 if(configView.txtInputMark.text !== '') {
                         chatView.updateChart(configView.chbDebug.checked,
                                              chatView.boom,

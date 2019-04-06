@@ -66,6 +66,11 @@ AnimationItem {
         isUpdate = true
     }
 
+    //TODO
+    function triggerUpdate(condition,boom,insert) {
+
+    }
+
     function updateChart(condition,boom,insert) {
         if(!condition) {
             if(!isUpdate) return

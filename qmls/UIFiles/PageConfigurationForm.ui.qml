@@ -98,12 +98,12 @@ Page {
 
             Grid {
                 rows: 2
-                columns: 2
+                columns: 3
                 width: parent.width
                 height: 100
-                leftPadding: 20
+                leftPadding: 10
                 rowSpacing: 5
-                columnSpacing: 50
+                columnSpacing: 20
                 flow: Grid.TopToBottom
                 CheckBox {
                     id: chbDebug
@@ -120,6 +120,16 @@ Page {
                 CheckBox {
                     id: checkBox
                     text: qsTr("AddLine")
+                }
+
+                CheckBox {
+                    id: checkBox4
+                    text: qsTr("State1")
+                }
+
+                CheckBox {
+                    id: checkBox5
+                    text: qsTr("State2")
                 }
             }
 
@@ -209,7 +219,7 @@ Page {
             Grid {
                 rows: 3
                 columns: 3
-                leftPadding: 35
+                leftPadding: 20
                 width: parent.width
                 height: 140
                 rowSpacing: 5
