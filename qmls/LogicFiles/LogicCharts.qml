@@ -62,23 +62,29 @@ AnimationItem {
         chart.textEdit.clear()
     }
 
+    function setUpdate() {
+        isUpdate = true
+    }
+
     function updateChart(condition,boom,insert) {
         if(!condition) {
+            if(!isUpdate) return
+            isUpdate = false
             var points = String(boom).split(',')
             var pointf = points.map(parseFloat)
             var pointOK = new Array
             pointOK = arrayTo3d(pointf,insert)
             pointOK.forEach(function(item) {
                 chart.textEdit.append(item)
-                //someObject.someSignal(item);
             })
             console.log(pointOK)
             someObject.someSignal(pointOK);
          } else {
-             chart.textEdit.append("debug mode ……")
-             someObject.someSignal([Math.floor(Math.random()*10),
-                                                   Math.floor(Math.random()*10),
-                                                   String(Math.floor(Math.random()*10))]);
+            var test = new Array
+            test.push([Math.floor(Math.random()*10),Math.floor(Math.random()*10),insert]);
+            chart.textEdit.append("debug mode >>")
+            // noted that 'test' is a list whose element is a list
+            someObject.someSignal(test)
          }
     }
 
@@ -98,7 +104,3 @@ AnimationItem {
 }
 
 
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

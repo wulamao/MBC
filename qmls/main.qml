@@ -62,7 +62,7 @@ ApplicationWindow {
 
         function onRecord(args){
             boom = String(args)
-            chatView.isUpdate = true
+            setUpdate()
         }
 
         Timer {
@@ -77,13 +77,10 @@ ApplicationWindow {
                     timer.interval = sampleTime
 
                 if(configView.txtInputMark.text !== '') {
-                    if(chatView.isUpdate) {
-                        chatView.isUpdate = false
                         chatView.updateChart(configView.chbDebug.checked,
                                              chatView.boom,
                                              configView.txtInputMark.text)
                                              //parseInt(configView.txtInputMark.text))
-                    }
                 }
             }
         }

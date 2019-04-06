@@ -56,7 +56,6 @@ void DataCollector::close() {
         m_serial->close();
         m_timer->stop();
     }
-
 }
 
 void DataCollector::writeData(const QByteArray &data)

@@ -34,8 +34,6 @@
                 backend.clearSignal.connect(function(arg) {
                     clearPoint();
                 });
-
-
             });
         }
 
@@ -47,22 +45,25 @@
             ytext : 'Mark',
             ztext : 'RSSI',
         }
+        var tips = ['0','1','2','3','4','5','6','7','8','9']
         var option = {
             //backgroundColor: '#dddddd',
             visualMap: [{
-            top: 10,
-               tooltip: {},
+               top: 10,
+               tooltip: {trigger: 'item'},
                type: 'piecewise',
                //calculable: true,
                dimension: 2,// 'Mark'
                //max: 9,
                //min:  0,
                //splitNumber: 10,
-               categories:['0','1','2','3','4','5','6','7','8','9'],
+               categories: tips,
                show: true,
                inRange: {
-                   color: ['#ff4000', '#ffbf00', '#bfff00', '#40ff00', '#00ffbf',
-                           '#00bfff', '#0040ff', '#7f00ff', '#ff00ff', '#ff0080']
+                   color: {
+                        '0':'#ff4000', '1':'#ffbf00', '2':'#bfff00', '3':'#40ff00', '4':'#00ffbf',
+                        '5':'#00bfff', '6':'#0040ff', '7':'#7f00ff', '8':'#ff00ff', '9':'#ff0080'
+                   }
                },
                textStyle: {
                    color: '#000'
@@ -92,12 +93,16 @@
                     orthographicSize: 200,
                     maxorthographicSize: 400,
                     minorthographicSize: 40,
-                }
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
             },
             xAxis3D: {name: config.xtext},
             yAxis3D: {
                         name: config.ytext,
                         type: 'category',
+                        data: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
                       },
             zAxis3D: {name: config.ztext},
             dataset: {
@@ -123,7 +128,9 @@
                         restore: { show: true },
                     }
                 },
-
+                tooltip: {
+                    trigger: 'item'
+                },
                 xAxis: [
                     {type: 'value', name: config.xtext},
                 ],
@@ -140,7 +147,7 @@
                     x: config.xtext,
                     y: config.ytext,
                     z: config.ztext,
-                    tooltip: [0, 1, 2]
+                    //tooltip: [0, 1, 2]
                 }
             },
             {
@@ -190,9 +197,6 @@
                 left: 'center',
                 text: ''
             },
-            tooltip: {
-                trigger: 'axis'
-            },
         };
 
         myChart.setOption(option);
@@ -202,18 +206,17 @@
             arg.forEach(function(item) {
                 data.push(item)
             })
-
             myChart.setOption(option);
             myChart.hideLoading();
         }
 
         function clearPoint() {
-            var img = new Image();
-            img.src = myChart.getDataURL({
-                pixelRatio: 2,
-                backgroundColor: '#fff'
-            });
-            backend.test(img)
+            //var img = new Image();
+            //img.src = myChart.getDataURL({
+                //pixelRatio: 2,
+                //backgroundColor: '#fff'
+            //});
+            //backend.test(img)
             myChart.showLoading();
             myChart.clear();
             data.splice(0, data.length)
