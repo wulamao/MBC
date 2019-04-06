@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/echarts-gl.min.js"></script>
+    <script src="../js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <div id="chart" style="height:400px;"></div>
+    <script type="text/javascript" src="../js/qwebchannel.js"></script>
+    <script type="text/javascript">file:///C:/Qt/Qt5.12.1/Examples/Qt-5.12.1/webchannel/shared/qwebchannel.js
+        // div height 100% doesn't work
+        // 图表渲染的容器对象
+        var chartContainer = document.getElementById("chart");
+        var myChart = echarts.init(chartContainer);
+
+        window.onload = function()
+        {
+            new QWebChannel(qt.webChannelTransport, function(channel) {
+                // all published objects are available in channel.objects under
+                // the identifier set in their attached WebChannel.id property
+                backend = channel.objects.backend;
+                // connect to a signal
+            });
+        }
+        //window.onresize = myChart.resize;
+        window.onresize = function(){
+            myChart.resize();
+        }
+
+        window.onload = function()
+        {
+            new QWebChannel(qt.webChannelTransport, function(channel) {
+                // all published objects are available in channel.objects under
+                // the identifier set in their attached WebChannel.id property
+                backend = channel.objects.backend;
+                // connect to a signal
+                backend.someSignal.connect(function(arg) {
+                    refresh(arg);
+                });
+                backend.clearSignal.connect(function(arg) {
+                    clearPoint();
+                });
+            });
+        }
+
+        var data = [["Distance","RSSI","Mark","Number","Speed"],]
+        var symbolSize = 3.5;
+        var sizeValue = '55%';
+        var config = {
+            xtext : 'Distance',
+            ytext : 'Mark',
+            ztext : 'RSSI',
+        }
+        var option = {
+            //backgroundColor: '#dddddd',
+            visualMap: [{
+               tooltip: {},
+               //type: 'piecewise',
+               top: 10,
+               calculable: true,
+               dimension: 2,
+               max: 9,
+               min:  0,
+               //splitNumber: 10,
+               show: true,
+               inRange: {
+                   color: ['#1710c0', '#0b9df0', '#00fea8', '#00ff0d', '#f5f811', '#f09a09', '#fe0300']
+                   //color: ['#1710c0', '#0b9df0', '#00fea8', '#f09a09', '#fe0300']
+               },
+               textStyle: {
+                   color: '#000'
+               }
+            }],
+            grid3D: {
+                width: '50%',
+                left: '5%',
+                bottom: '10%',
+                axisLine: {
+                    lineStyle: {
+                        color: '#000'
+                    }
+                },
+                axisPointer: {
+                    lineStyle: {
+                        color: '#ffbd67'
+                    }
+                },
+                viewControl: {
+                    autoRotate: true,
+                    projection: 'orthographic'
+                }
+            },
+            xAxis3D: {name: config.xtext},
+            yAxis3D: {name: config.ytext,
+                        //type: 'category',
+                        },
+            zAxis3D: {name: config.ztext},
+            dataset: {
+                dimensions: [
+                    'Distance',
+                    'RSSI',
+                    'Mark',
+                    'Type',
+                    'Arguments',
+                ],
+                source: data
+            },
+            grid: [
+                    {width: '30%', left: '60%'},
+                ],
+                legend: {
+                    data: ['Data']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: { show: true },
+                        dataZoom: { show: true },
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                    }
+                },
+
+                xAxis: [
+                    {type: 'value', name: config.xtext},
+                ],
+                yAxis: [
+                    {type: 'value', name: config.ztext},
+                ],
+            series: [
+            {
+                type: 'scatter3D',
+                symbolSize: symbolSize,
+                encode: {
+                    x: config.xtext,
+                    y: config.ytext,
+                    z: config.ztext,
+                    tooltip: [0, 1, 2, 3, 4]
+                }
+            },
+            {
+                type: 'scatter',
+                symbolSize: symbolSize,
+                markPoint: {
+                    symbolSize: symbolSize+5,
+                    data: [
+                        { type: 'max', name: '最大值' },
+                        { type: 'min', name: '最小值' }
+                    ]
+                },
+                markLine: {
+                    data: [
+                        { type: 'average', name: '平均值' }
+                    ]
+                },
+                encode: {
+                    x: config.xtext,
+                    y: config.ztext,
+                    tooltip: [0, 1, 2, 3, 4]
+                }
+            }],
+            dataZoom:[{
+                type: 'slider',
+                show: false,
+                xAxisIndex: [0],
+                realtime: true,
+            },
+            ],
+        };
+
+        myChart.setOption(option);
+
+        function refresh(arg) {
+            myChart.showLoading();
+            arg.forEach(function(item) {
+                data.push(item)
+            })
+            data.push(arg)
+            myChart.setOption(option);
+            myChart.hideLoading();
+        }
+
+        function clearPoint() {
+            myChart.showLoading();
+            myChart.clear();
+            data.splice(0, data.length)
+            myChart.setOption(option);
+            myChart.hideLoading();
+        }
+
+
+        //$.getJSON("../data/life-expectancy-table.json", function (_data) { });
+
+
+    </script>
+</body>
+</html>

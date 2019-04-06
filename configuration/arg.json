@@ -1,0 +1,26 @@
+{
+    "serialport":{
+            "lidar":"0",
+            "data": "0"
+    },
+    "chart_mode":{
+            "mode1": true,
+            "mode2": true,
+            "mode3": true,
+            "mode4": true
+    },
+    "text":{
+            "name":"DEBUG",
+            "type":"hand01",
+    },
+    "owner":{
+             "name":"John Doe",
+             "organization":"Acme Widgets Inc."
+    },
+    "database":{
+         "server":"192.0.2.62",
+         "_comment_server":"use IP address in case network name resolution is not working",
+         "port":"143",
+         "file":"payroll.dat"
+    }
+}
