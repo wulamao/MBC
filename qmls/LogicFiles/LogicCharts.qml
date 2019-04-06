@@ -1,35 +1,45 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+
+import QtWebChannel 1.0
+
 import "../UIFiles"
+import "../LogicFiles"
 
 AnimationItem {
-    property var logData:["0,0"]
     property bool isUpdate: false
     property alias chart: chart
+    property alias someObject: someObject
 
     PageChartsForm {
         id: chart
         width: 1000
         height: 600
-    }
 
-    Timer {
-        id: timer
-        interval: 3000;
-        repeat: true
-        running: false
-        triggeredOnStart: false
-        onTriggered: {
-            var data = logData
-            if(isUpdate) {
-                isUpdate = false
-                data.forEach(function(item) {
-                })
-                data.splice(0,data.length)
+        QtObject {
+            id: someObject
+            // ID, under which this object will be known at WebEngineView side
+            WebChannel.id: "backend"
+            property string someProperty: "Break on through to the other side"
+            signal someSignal(var arg)
+            signal clearSignal
+
+            function test(varx) {
+                console.log(varx)
             }
         }
-    }
 
+        WebChannel {
+            id: channel
+            registeredObjects: [someObject]
+
+
+        }
+
+        webEngineView.url: "../../htmls/echarts.html"
+        webEngineView.webChannel: channel
+
+    }
 
     function getData() {
        return chart.textEdit.text
@@ -43,33 +53,32 @@ AnimationItem {
         });
     }
 
+    function addInfoData(txt) {
+       chart.textEdit.append(txt)
+    }
+
     function clear() {
-        chart.someObject.clearSignal()
+        someObject.clearSignal()
         chart.textEdit.clear()
     }
 
     function updateChart(condition,boom,insert) {
         if(!condition) {
-            if(isUpdate) {
-                isUpdate = false
-
-                //console.log("boom:"+String(boom).split(',')[0]);
-                var points = String(boom).split(',')
-                var pointf = points.map(parseFloat)
-                var pointOK = new Array
-                pointOK = arrayTo3d(pointf,insert)
-                pointOK.forEach(function(item) {
-                    chatView.chart.textEdit.append(item)
-                })
-
-                chatView.chart.someObject.someSignal(pointOK);
-              }
+            var points = String(boom).split(',')
+            var pointf = points.map(parseFloat)
+            var pointOK = new Array
+            pointOK = arrayTo3d(pointf,insert)
+            pointOK.forEach(function(item) {
+                chart.textEdit.append(item)
+                //someObject.someSignal(item);
+            })
+            console.log(pointOK)
+            someObject.someSignal(pointOK);
          } else {
-             chatView.chart.textEdit.append("debug mode ……")
-             chatView.chart.someObject.someSignal([Math.floor(Math.random()*10),
+             chart.textEdit.append("debug mode ……")
+             someObject.someSignal([Math.floor(Math.random()*10),
                                                    Math.floor(Math.random()*10),
-                                                   Math.floor(Math.random()*10),
-                                                   Math.floor(Math.random()*3), 0]);
+                                                   String(Math.floor(Math.random()*10))]);
          }
     }
 

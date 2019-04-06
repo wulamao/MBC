@@ -25,7 +25,6 @@ public:
     Q_INVOKABLE void close();
 
     QString getLastData();
-    void getISerInfo();
 
 signals:
     void sglFinished();
@@ -40,6 +39,7 @@ public slots:
     void startRecord();
     void stopRecord();
     void saveData(QString data,QString name);
+    QStringList getSerInfo();
 
     void test() {
 //        while (1) {

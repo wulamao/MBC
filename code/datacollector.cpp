@@ -52,8 +52,11 @@ bool DataCollector::open(QString port) {
 }
 
 void DataCollector::close() {
-    if (m_serial->isOpen())
+    if (m_serial->isOpen()) {
         m_serial->close();
+        m_timer->stop();
+    }
+
 }
 
 void DataCollector::writeData(const QByteArray &data)
@@ -130,7 +133,7 @@ void DataCollector::saveData(QString data,QString name) {
     qDebug() << "Data saved:" << "../MBC/data/"+str+name+".txt";
 }
 
-void DataCollector::getISerInfo()
+QStringList DataCollector::getSerInfo()
 {
     QStringList m_slist;
     static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
@@ -147,5 +150,6 @@ void DataCollector::getISerInfo()
              << (!description.isEmpty() ? description : blankString);
     }
     qDebug() << m_slist;
-    //emit getSerialPortNum(m_serinfo.m_slist);
+    return m_slist;
+    //emit getSerialPortNum(m_slist);
 }

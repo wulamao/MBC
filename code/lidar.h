@@ -46,6 +46,7 @@ private:
     RPlidarDriver* m_drv=nullptr;
     QTimer* m_timer=nullptr;
     QMutex qMutex;
+    bool m_initFlag=false;
 };
 
 #endif

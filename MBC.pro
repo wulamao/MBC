@@ -132,8 +132,6 @@ DISTFILES += \
     js/jquery-3.3.1.min.js \
     js/qwebchannel.js \
     js/vue.min.js \
-    htmls/test.html \
-    htmls/test2.html \
     qmls/UIFiles/PageChartsForm.ui.qml \
     qmls/UIFiles/PageConfigurationForm.ui.qml \
     qmls/UIFiles/PageMonitorForm.ui.qml \

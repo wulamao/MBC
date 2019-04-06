@@ -38,6 +38,9 @@ ApplicationWindow {
             btnClear.onClicked: {
                 chatView.clear()
             }
+            btnHelp.onClicked: {
+                chatView.addInfoData(threadCollector.getSerInfo())
+            }
             chbDebug.onCheckStateChanged: {
             }
         }
@@ -47,9 +50,8 @@ ApplicationWindow {
         id: chatView
         anchors.fill: parent
         show: index === 1
-
+        //receive data from back end
         property var boom
-
         Component.onCompleted: {
             console.log("chatView in");
             threadCollector.newData.connect(onRecord)
@@ -60,7 +62,6 @@ ApplicationWindow {
 
         function onRecord(args){
             boom = String(args)
-            //console.log("args:"+String(args));
             chatView.isUpdate = true
         }
 
@@ -74,9 +75,16 @@ ApplicationWindow {
                 var sampleTime = Number(configView.txtInputSample.text)
                 if(sampleTime>100 || sampleTime<10000)
                     timer.interval = sampleTime
-                chatView.updateChart(configView.chbDebug.checked,
-                                     chatView.boom,
-                                     parseInt(configView.txtInputMark.text))
+
+                if(configView.txtInputMark.text !== '') {
+                    if(chatView.isUpdate) {
+                        chatView.isUpdate = false
+                        chatView.updateChart(configView.chbDebug.checked,
+                                             chatView.boom,
+                                             configView.txtInputMark.text)
+                                             //parseInt(configView.txtInputMark.text))
+                    }
+                }
             }
         }
     }

@@ -33,13 +33,18 @@ PageConfigurationForm {
     btnOK.onClicked:  {
         var portDist = cmbDistance.currentText
         var portCltr = cmbCollector.currentText
+        console.log("openedDist:"+openedDist)
+        console.log("openedCltr:"+openedCltr)
 
         console.log(portDist,portCltr,elmDist.checked,elmCltr.checked)
         //
         if(elmDist.checked === true) {
-            openedDist = threadLidar.open(portDist)
-            if(openedDist !== true)
-                elmDist.checked = false
+            if(!openedDist) {
+                openedDist = threadLidar.open(portDist)
+                if(openedDist !== true)
+                    elmDist.checked = false
+            } else
+                console.log("openedDist is true, opened")
         } else {
             threadLidar.close()
             openedDist = false
@@ -47,9 +52,12 @@ PageConfigurationForm {
         }
         //
         if(elmCltr.checked === true) {
-            openedCltr = threadCollector.open(portCltr)
-            if(openedCltr !== true)
-                elmCltr.checked = false
+            if(!openedCltr) {
+                openedCltr = threadCollector.open(portCltr)
+                if(openedCltr !== true)
+                    elmCltr.checked = false
+            } else
+                console.log("openedCltr is true, opened")
         } else {
             threadCollector.close()
             openedCltr = false
@@ -64,9 +72,8 @@ PageConfigurationForm {
 
     btnStop.onClicked : {
         threadLidar.stopRecord()
-        threadCollector.startRecord()
+        threadCollector.stopRecord()
     }
-
 
 }
 

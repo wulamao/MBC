@@ -93,8 +93,8 @@ bool Lidar::open(QString port) {
         if (healthinfo.status == RPLIDAR_STATUS_ERROR) {
             qDebug("Error, rplidar internal error detected. Please reboot the device to retry.\n");
             // enable the following code if you want rplidar to be reboot by software
-            // m_drv->reset();
-            goto err;
+            m_drv->reset();
+            //goto err;
         }
 
         m_drv->startMotor();
@@ -108,7 +108,7 @@ bool Lidar::open(QString port) {
         }
     } while(0);
 
-    //startRecord();
+    m_initFlag = true;
     return true;
 
 err:
@@ -125,6 +125,7 @@ void Lidar::close() {
         RPlidarDriver::DisposeDriver(m_drv);
         m_drv = nullptr;
         m_timer->stop();
+        m_initFlag = false;
     }
 }
 
@@ -156,7 +157,8 @@ float dataFilter(float pData[], int nSize)
 
 void Lidar::triggerTest() {
     qMutex.lock();
-    capture();
+    if(m_initFlag)
+        capture();
     qMutex.unlock();
 }
 //
@@ -188,7 +190,10 @@ bool Lidar::capture()
                     }
                 }
             }
-            if(ans == RESULT_OPERATION_TIMEOUT) qDebug() << "TIME OUT!!!";
+            if(ans == RESULT_OPERATION_TIMEOUT) {
+                 qDebug() << "TIME OUT!!!";
+                 m_drv->reset();
+            }
 
             float resualt = dataFilter(dist, dist_count);
 

@@ -16,15 +16,6 @@
         var chartContainer = document.getElementById("chart");
         var myChart = echarts.init(chartContainer);
 
-        window.onload = function()
-        {
-            new QWebChannel(qt.webChannelTransport, function(channel) {
-                // all published objects are available in channel.objects under
-                // the identifier set in their attached WebChannel.id property
-                backend = channel.objects.backend;
-                // connect to a signal
-            });
-        }
         //window.onresize = myChart.resize;
         window.onresize = function(){
             myChart.resize();
@@ -43,10 +34,12 @@
                 backend.clearSignal.connect(function(arg) {
                     clearPoint();
                 });
+
+
             });
         }
 
-        var data = [["Distance","RSSI","Mark","Number","Speed"],]
+        var data = [["Distance","RSSI","Mark"],]
         var symbolSize = 3.5;
         var sizeValue = '55%';
         var config = {
@@ -57,25 +50,27 @@
         var option = {
             //backgroundColor: '#dddddd',
             visualMap: [{
+            top: 10,
                tooltip: {},
-               //type: 'piecewise',
-               top: 10,
-               calculable: true,
-               dimension: 2,
-               max: 9,
-               min:  0,
+               type: 'piecewise',
+               //calculable: true,
+               dimension: 2,// 'Mark'
+               //max: 9,
+               //min:  0,
                //splitNumber: 10,
+               categories:['0','1','2','3','4','5','6','7','8','9'],
                show: true,
                inRange: {
-                   color: ['#1710c0', '#0b9df0', '#00fea8', '#00ff0d', '#f5f811', '#f09a09', '#fe0300']
-                   //color: ['#1710c0', '#0b9df0', '#00fea8', '#f09a09', '#fe0300']
+                   color: ['#ff4000', '#ffbf00', '#bfff00', '#40ff00', '#00ffbf',
+                           '#00bfff', '#0040ff', '#7f00ff', '#ff00ff', '#ff0080']
                },
                textStyle: {
                    color: '#000'
                }
             }],
             grid3D: {
-                width: '50%',
+                width: '45%',
+                //height: '45%',
                 left: '5%',
                 bottom: '10%',
                 axisLine: {
@@ -90,21 +85,26 @@
                 },
                 viewControl: {
                     autoRotate: true,
-                    projection: 'orthographic'
+                    projection: 'orthographic',//'perspective'
+                    //distance: 300,
+                    //maxDistance: 400,
+                    //minDistance: 40,
+                    orthographicSize: 200,
+                    maxorthographicSize: 400,
+                    minorthographicSize: 40,
                 }
             },
             xAxis3D: {name: config.xtext},
-            yAxis3D: {name: config.ytext,
-                        //type: 'category',
-                        },
+            yAxis3D: {
+                        name: config.ytext,
+                        type: 'category',
+                      },
             zAxis3D: {name: config.ztext},
             dataset: {
                 dimensions: [
                     'Distance',
                     'RSSI',
                     'Mark',
-                    'Type',
-                    'Arguments',
                 ],
                 source: data
             },
@@ -132,16 +132,20 @@
                 ],
             series: [
             {
+                id: 'scatter3D',
+                name: 'scatter3D',
                 type: 'scatter3D',
                 symbolSize: symbolSize,
                 encode: {
                     x: config.xtext,
                     y: config.ytext,
                     z: config.ztext,
-                    tooltip: [0, 1, 2, 3, 4]
+                    tooltip: [0, 1, 2]
                 }
             },
             {
+                id: 'scatter',
+                name: 'scatter',
                 type: 'scatter',
                 symbolSize: symbolSize,
                 markPoint: {
@@ -159,16 +163,36 @@
                 encode: {
                     x: config.xtext,
                     y: config.ztext,
-                    tooltip: [0, 1, 2, 3, 4]
+                    tooltip: [0, 1, 2]
                 }
             }],
             dataZoom:[{
-                type: 'slider',
-                show: false,
+                type: 'inside',
+                show: true,
                 xAxisIndex: [0],
                 realtime: true,
+            }],
+            toolbox: {
+                //left: 'center',
+                feature: {
+                    dataZoom: {
+                        //yAxisIndex: 'none',
+                    },
+                    restore: {},
+                    //saveAsImage: {},
+                    magicType: {
+                        //type: ['line', 'bar', 'stack', 'tiled']
+                    },
+                    dataView: {},
+                },
             },
-            ],
+            title: {
+                left: 'center',
+                text: ''
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
         };
 
         myChart.setOption(option);
@@ -178,12 +202,18 @@
             arg.forEach(function(item) {
                 data.push(item)
             })
-            data.push(arg)
+
             myChart.setOption(option);
             myChart.hideLoading();
         }
 
         function clearPoint() {
+            var img = new Image();
+            img.src = myChart.getDataURL({
+                pixelRatio: 2,
+                backgroundColor: '#fff'
+            });
+            backend.test(img)
             myChart.showLoading();
             myChart.clear();
             data.splice(0, data.length)
