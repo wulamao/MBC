@@ -93,6 +93,16 @@ AnimationItem {
          }
     }
 
+    function readFile(txtData) {
+        var str = txtData.replace(/\n/g,',');
+        var points = String(str).split(',')
+        var pointf = points.map(parseFloat)
+        var pointOK = new Array
+        pointOK = arrayTo3dEx(pointf)
+        pointOK.forEach(function(item) { chart.textEdit.append(item) })
+        someObject.someSignal(pointOK);
+    }
+
     //
     function arrayTo3d(arr,insert){
         var result = new Array
@@ -100,6 +110,18 @@ AnimationItem {
             result.push([(arr)[i],(arr)[i+1],insert]);
         }
         return result;
+    }
+    //
+    function arrayTo3dEx(arr){
+        var result = new Array
+        for(var i=0;i<arr.length-2;i+=3){
+            result.push([(arr)[i],(arr)[i+1],String((arr)[i+2])]);
+        }
+        return result;
+    }
+
+    function getText() {
+        return chart.textEdit.text
     }
 
 //    Component.onCompleted: {

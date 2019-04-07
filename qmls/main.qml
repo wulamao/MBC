@@ -1,5 +1,8 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.5
+import QtQuick.Dialogs 1.2
+import Qt.labs.platform 1.1
+import org.example.io 1.0
 
 import "../qmls/LogicFiles"
 import "../qmls/UIFiles"
@@ -20,8 +23,31 @@ ApplicationWindow {
         LogicConfiguration {
             id: configView
             anchors.fill: parent
+
+            FileIO {
+                id: io
+            }
+            FileDialog {
+                id: openDialog
+                onAccepted: {
+                    io.source = openDialog.file
+                    io.read()
+                }
+            }
+            FileDialog {
+                id: saveDialog
+                fileMode: FileDialog.SaveFile
+                onAccepted: {
+                    console.log(saveDialog.file)
+                    io.source = saveDialog.file
+                    io.text = chatView.getText()
+                    io.write()
+                }
+            }
+
             Component.onCompleted: {
                 console.log("drawer in");
+                io.textChanged.connect(chatView.readFile)
             }
             Component.onDestruction: {
                 console.log("drawer out");
@@ -40,6 +66,12 @@ ApplicationWindow {
             }
             btnHelp.onClicked: {
                 chatView.addInfoData(threadCollector.getSerInfo())
+            }
+            btnImport.onClicked: {
+                openDialog.open()
+            }
+            btnExpert.onClicked: {
+                saveDialog.open()
             }
             chbDebug.onCheckStateChanged: {
             }

@@ -21,6 +21,9 @@ Page {
     property alias btnHelp: btnHelp
     property alias chbDebug: chbDebug
     property alias txtInputSample: txtInputSample
+    property alias btnImport: btnImport
+    property alias btnExpert: btnExpert
+    property alias textMemo: textMemo
 
     title: qsTr("Configuration")
     ScrollView {
@@ -245,12 +248,12 @@ Page {
                 }
 
                 Button {
-                    id: button4
+                    id: btnExpert
                     text: qsTr("Expert")
                 }
 
                 Button {
-                    id: button5
+                    id: btnImport
                     text: qsTr("Import")
                 }
                 Button {
@@ -289,6 +292,16 @@ Have fun! via W.")
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 0
+                }
+
+                TextEdit {
+                    id: textMemo
+                    x: 20
+                    y: 14
+                    width: 344
+                    height: 139
+                    text: "MemoZy"
+                    font.pixelSize: 12
                 }
             }
         }

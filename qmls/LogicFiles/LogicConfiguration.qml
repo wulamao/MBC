@@ -1,7 +1,9 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.5
 import Qt.labs.settings 1.0
+
 import "../UIFiles"
+
 
 PageConfigurationForm {
     id: root
@@ -13,15 +15,18 @@ PageConfigurationForm {
         id: settings
         property int cmbDist: 0
         property int cmbCltr: 0
+        property string memo: "Mark 0: sigle charger ..."
     }
 
     Component.onCompleted: {
         cmbCollector.currentIndex = settings.cmbCltr
         cmbDistance.currentIndex = settings.cmbDist
+        textMemo.text = settings.memo
     }
     Component.onDestruction: {
         settings.cmbDist = cmbDistance.currentIndex
         settings.cmbCltr = cmbCollector.currentIndex
+        settings.memo = textMemo.text
     }
 
     elmCltr.onClipChanged: {
@@ -74,6 +79,5 @@ PageConfigurationForm {
         threadLidar.stopRecord()
         threadCollector.stopRecord()
     }
-
 }
 

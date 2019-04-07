@@ -4,6 +4,7 @@
 #include "./code/datacollector.h"
 #include "./code/lidar.h"
 #include "./code/qmlkey.h"
+#include "./code/fileio_plugin.h"
 
 #include <QThread>
 #include <QtWebEngine>
@@ -68,6 +69,10 @@ int main(int argc, char *argv[])
 
     //register handled exception function
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
+
+    //
+    FileioPlugin* fileioPlugin = new FileioPlugin();
+    fileioPlugin->registerTypes("org.example.io");
 
     // thread create
     DataCollector* threadCollector = new DataCollector();

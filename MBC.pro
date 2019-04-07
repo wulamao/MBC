@@ -18,7 +18,9 @@ SOURCES += \
         main.cpp \
     code/datacollector.cpp \
     code/lidar.cpp \
-    code/qmlkey.cpp
+    code/qmlkey.cpp \
+    code/fileio.cpp \
+    code/fileio_plugin.cpp
 
 HEADERS += \
     sdk/include/rplidar.h \
@@ -89,7 +91,9 @@ HEADERS += \
     sdk/src/sdkcommon.h \
     code/datacollector.h \
     code/lidar.h \
-    code/qmlkey.h
+    code/qmlkey.h \
+    code/fileio.h \
+    code/fileio_plugin.h
 
 RESOURCES += qml.qrc
 
