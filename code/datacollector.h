@@ -21,9 +21,6 @@ public:
     ~DataCollector();
 
     void delay(unsigned long n);
-    Q_INVOKABLE bool open(QString port);
-    Q_INVOKABLE void close();
-
     QString getLastData();
 
 signals:
@@ -31,6 +28,8 @@ signals:
     void newData(QStringList args);
 
 public slots:
+    bool open(QString port);
+    void close();
     void update(QString);
     void writeData(const QByteArray &data);
     void readData();

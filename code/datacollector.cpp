@@ -21,6 +21,8 @@ DataCollector::DataCollector() {
     QObject::connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
     QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(sendData()));
     //
+    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+    qDebug() << "QTimerThread:" << threadText;
 }
 DataCollector::~DataCollector() {
     if(!m_serial) {
@@ -96,13 +98,15 @@ void DataCollector::sendData() {
         emit newData(*m_qlist);
         //qDebug() << *m_qlist;
         m_qlist->clear();
+        QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+        qDebug() << "collectorThread:" << threadText;
     }
-    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
-    qDebug() << "collectorThread:" << threadText;
 }
 
 void DataCollector::startRecord() {
     m_timer->start(500);
+    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+    qDebug() << "collectorThread:" << threadText;
 }
 
 void DataCollector::stopRecord() {

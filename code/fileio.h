@@ -20,9 +20,12 @@ public:
 public slots:
     void setSource(QUrl source);
     void setText(QString text);
+    void savefile(QString dir, QString text);
+    void openfile(QString dir);
 signals:
     void sourceChanged(QUrl arg);
     void textChanged(QString arg);
+    void sglFinished();
 private:
     QUrl m_source;
     QString m_text;

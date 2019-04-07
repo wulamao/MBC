@@ -2,13 +2,14 @@ import QtQuick 2.9
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.1
-import org.example.io 1.0
+//import org.example.io 1.0
 
 import "../qmls/LogicFiles"
 import "../qmls/UIFiles"
 
 ApplicationWindow {
     id: window
+
     visible: true
     width: 1000
     height: 600
@@ -16,32 +17,32 @@ ApplicationWindow {
 
     property int index: 1
 
+
     Drawer {
         id: drawer
         width: parent.width * 0.4
         height: parent.height
         LogicConfiguration {
             id: configView
+            objectName: "configView"
             anchors.fill: parent
+            signal saveDataSignal(string content, string name)
 
-            FileIO {
-                id: io
-            }
             FileDialog {
                 id: openDialog
+                objectName: "openDialog"
+                signal importSignal(string dir)
                 onAccepted: {
-                    io.source = openDialog.file
-                    io.read()
+                    importSignal(openDialog.file)
                 }
             }
             FileDialog {
                 id: saveDialog
+                objectName: "saveDialog"
+                signal expertSignal(string dir,string content)
                 fileMode: FileDialog.SaveFile
                 onAccepted: {
-                    console.log(saveDialog.file)
-                    io.source = saveDialog.file
-                    io.text = chatView.getText()
-                    io.write()
+                    expertSignal(saveDialog.file, chatView.getText())
                 }
             }
 
@@ -54,7 +55,8 @@ ApplicationWindow {
             }
             //
             btnSaveData.onClicked : {
-                threadCollector.saveData(chatView.getData(),txtInputName.text)
+                //threadCollector.saveData(chatView.getData(),txtInputName.text)
+                saveDataSignal(chatView.getData(),txtInputName.text)
             }
 
             btnScreenShot.onClicked: {
@@ -90,6 +92,7 @@ ApplicationWindow {
 
     LogicCharts {
         id: chatView
+        objectName: "chatView"
         anchors.fill: parent
         show: index === 1
         //receive data from back end

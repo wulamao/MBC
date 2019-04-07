@@ -4,7 +4,7 @@
 #include "./code/datacollector.h"
 #include "./code/lidar.h"
 #include "./code/qmlkey.h"
-#include "./code/fileio_plugin.h"
+#include "./code/fileio.h"
 
 #include <QThread>
 #include <QtWebEngine>
@@ -62,6 +62,35 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException){
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+QObject *findClindByObjectNameFromQmlEngine(QQmlApplicationEngine *qmlEngine, QString objectName)
+{
+    if (qmlEngine == Q_NULLPTR) {
+        return Q_NULLPTR;
+    }
+
+    QList<QObject*> rootObjects = qmlEngine->rootObjects();
+    QObject* child = Q_NULLPTR;
+
+    foreach (QObject* iter, rootObjects) {
+        if (iter->inherits("QQuickItem")) {
+            child = iter->findChild<QObject*>(objectName);
+            break;
+        }
+
+        child = iter->findChild<QObject*>(objectName);
+        if (child != Q_NULLPTR) {
+            break;
+        }
+
+        QObject* contentItem = iter->property("contentItem").value<QObject*>();
+        if (contentItem != Q_NULLPTR) {
+            child = contentItem->findChild<QObject*>(objectName);
+            break;
+        }
+    }
+    return child;
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -70,29 +99,35 @@ int main(int argc, char *argv[])
     //register handled exception function
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 
+    // as a plugin
+    //FileioPlugin* fileioPlugin = new FileioPlugin();
+    //fileioPlugin->registerTypes("org.example.io");
     //
-    FileioPlugin* fileioPlugin = new FileioPlugin();
-    fileioPlugin->registerTypes("org.example.io");
-
+    FileIO* io = new FileIO();
     // thread create
     DataCollector* threadCollector = new DataCollector();
     Lidar* threadLidar = new Lidar();
-    QThread thread1,thread2;
+    QThread thread1,thread2,thread3;
     threadCollector->moveToThread(&thread1);
     threadLidar->moveToThread(&thread2);
+//    io->moveToThread(&thread3);
 
     // thread quit
     // AutoConnection default exec in the same thread
     // DirectConnection exec in the thread which emit this signal
     // QueuedConnection exec in different threads
-    QObject::connect(&thread1, SIGNAL(started()), threadCollector, SLOT(test()));
+    //QObject::connect(&thread1, SIGNAL(started()), threadCollector, SLOT(test()));
     QObject::connect(threadCollector, SIGNAL(sglFinished()), &thread1, SLOT(quit()));
     QObject::connect(&thread1, SIGNAL(finished()), &thread1, SLOT(deleteLater()));
-    QObject::connect(&thread2, SIGNAL(started()), threadLidar, SLOT(test()));
+    //QObject::connect(&thread2, SIGNAL(started()), threadLidar, SLOT(test()));
     QObject::connect(threadLidar, SIGNAL(sglFinished()), &thread2, SLOT(quit()));
     QObject::connect(&thread2, SIGNAL(finished()), &thread2, SLOT(deleteLater()));
+    //QObject::connect(&thread3, SIGNAL(started()), io, SLOT(test()));
+//    QObject::connect(io, SIGNAL(sglFinished()), &thread3, SLOT(quit()));
+//    QObject::connect(&thread3, SIGNAL(finished()), &thread3, SLOT(deleteLater()));
     thread1.start();
     thread2.start();
+//    thread3.start();
 
     //
     QtWebEngine::initialize();
@@ -108,7 +143,9 @@ int main(int argc, char *argv[])
     QmlKey qmlKey;
     engine.rootContext()->setContextProperty("threadLidar", threadLidar);
     engine.rootContext()->setContextProperty("threadCollector", threadCollector);
+    engine.rootContext()->setContextProperty("io", io);
     engine.rootContext()->setContextProperty("qmlKey", &qmlKey);
+
     engine.load(QUrl(QStringLiteral("../MBC/qmls/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
@@ -116,13 +153,31 @@ int main(int argc, char *argv[])
     // after load qml
     QObject *root = engine.rootObjects()[0];
     root->installEventFilter(&qmlKey);
-    // log handler
-//    qInstallMessageHandler(myMessageOutput);
+
     //
     QObject::connect(threadLidar, SIGNAL(distReady(QString)), threadCollector, SLOT(update(QString)));
+    //get QML item
+    QObject* configView = findClindByObjectNameFromQmlEngine(&engine,"configView");
+    QObject::connect(configView, SIGNAL(saveDataSignal(QString,QString)), threadCollector, SLOT(saveData(QString,QString)));
+//    QObject::connect(configView, SIGNAL(startRecord()), threadCollector, SLOT(startRecord()),Qt::QueuedConnection);
+//    QObject::connect(configView, SIGNAL(startRecord()), threadLidar, SLOT(startRecord()),Qt::QueuedConnection);
+//    QObject::connect(configView, SIGNAL(stopRecord()), threadCollector, SLOT(stopRecord()),Qt::QueuedConnection);
+//    QObject::connect(configView, SIGNAL(stopRecord()), threadLidar, SLOT(stopRecord()),Qt::QueuedConnection);
+
+    QObject* openDialog = findClindByObjectNameFromQmlEngine(&engine,"openDialog");
+    QObject::connect(openDialog, SIGNAL(importSignal(QString)), io, SLOT(openfile(QString)));
+    QObject* saveDialog = findClindByObjectNameFromQmlEngine(&engine,"saveDialog");
+    QObject::connect(saveDialog, SIGNAL(expertSignal(QString,QString)), io, SLOT(savefile(QString,QString)));
+
+    //QObject* chatView = findClindByObjectNameFromQmlEngine(&engine,"chatView");
+    //QObject::connect(io, SIGNAL(textChanged(QString)), chatView, SLOT(chatView.readFile(QString)));
+
+
+    // log handler
+//    qInstallMessageHandler(myMessageOutput);
 
     QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
-    //qDebug() << "mainThread:" << threadText;
+    qDebug() << "mainThread:" << threadText;
 
     return app.exec();
 }

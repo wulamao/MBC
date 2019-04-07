@@ -7,7 +7,9 @@ FileIO::FileIO(QObject *parent)
 
 FileIO::~FileIO()
 {
+    emit sglFinished();
 }
+
 
 void FileIO::read()
 {
@@ -22,6 +24,7 @@ void FileIO::read()
     if(file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
         m_text = stream.readAll();
+        //qDebug() << m_text;
         emit textChanged(m_text);
     }
 }
@@ -36,6 +39,8 @@ void FileIO::write()
         QTextStream stream(&file);
         stream << m_text;
     }
+    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+    qDebug() << "ioThread:" << threadText;
 }
 
 QUrl FileIO::source() const
@@ -65,4 +70,16 @@ void FileIO::setText(QString text)
     m_text = text;
     emit textChanged(text);
 }
+
+void FileIO::savefile(QString dir, QString text) {
+    m_source = dir;
+    m_text = text;
+    write();
+}
+
+void FileIO::openfile(QString dir) {
+    m_source = dir;
+    read();
+}
+
 

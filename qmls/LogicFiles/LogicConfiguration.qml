@@ -11,6 +11,9 @@ PageConfigurationForm {
     property bool openedDist: false
     property bool openedCltr: false
 
+//    signal startRecord()
+//    signal stopRecord()
+
     Settings {
         id: settings
         property int cmbDist: 0

@@ -20,10 +20,7 @@ public:
 
     void delay(unsigned long n);
     // Q_INVOKABLE exposure this function to QML
-    Q_INVOKABLE bool open(QString port);
-    Q_INVOKABLE void close();
-    Q_INVOKABLE void startRecord();
-    Q_INVOKABLE void stopRecord();
+
 
 signals:
     void sglFinished();
@@ -31,6 +28,10 @@ signals:
 
 
 public slots:
+    bool open(QString port);
+    void close();
+    void startRecord();
+    void stopRecord();
     void testSlot();
     bool capture();
     void triggerTest();

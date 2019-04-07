@@ -99,7 +99,7 @@ AnimationItem {
         var pointf = points.map(parseFloat)
         var pointOK = new Array
         pointOK = arrayTo3dEx(pointf)
-        pointOK.forEach(function(item) { chart.textEdit.append(item) })
+        console.log("a******************************************&")
         someObject.someSignal(pointOK);
     }
 
