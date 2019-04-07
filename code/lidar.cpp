@@ -169,9 +169,7 @@ bool Lidar::capture()
     float dist[8192];
     size_t   count = _countof(nodes);
     if(m_drv==nullptr) return false;
-
-    if(1)
-    {
+    else {
         ans = m_drv->grabScanData(nodes, count);
         if (IS_OK(ans) || ans == RESULT_OPERATION_TIMEOUT) {
             m_drv->grabScanData(nodes, count);
@@ -193,6 +191,7 @@ bool Lidar::capture()
             if(ans == RESULT_OPERATION_TIMEOUT) {
                  qDebug() << "TIME OUT!!!";
                  m_drv->reset();
+                 return false;
             }
 
             float resualt = dataFilter(dist, dist_count);

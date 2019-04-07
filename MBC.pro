@@ -107,6 +107,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # Icon
 RC_ICONS = $$PWD/figure/title.ico
 
+# debug library
+LIBS += -lDbgHelp
+QMAKE_LFLAGS_RELEASE = /INCREMENTAL:NO /DEBUG
+
 # Lidar library
 win32: LIBS += -L$$PWD/./libs/ -lrplidar_driver
 

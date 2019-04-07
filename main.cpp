@@ -9,8 +9,15 @@
 #include <QtWebEngine>
 #include <QString>
 
-const QString logFilePath = "./debug.log";
-bool logToFile = false;
+#include <Windows.h>
+#include <DbgHelp.h>
+#include <QMessageBox>
+#include <QTime>
+#include <QFile>
+#include <QDir>
+
+static const QString logFilePath = "./debug.log";
+static bool logToFile = false;
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -38,10 +45,29 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
         abort();
 }
 
+
+//crash handler
+LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException){
+    /*
+      ***some code to save data***
+    */
+    EXCEPTION_RECORD* record = pException->ExceptionRecord;
+    QString errCode(QString::number(record->ExceptionCode,16)),
+            errAdr(QString::number((quint32)record->ExceptionAddress,16)),
+            errMod;
+    QMessageBox::critical(nullptr,"software crash","<FONT size=4><div><b>sorry for that</b><br/></div>"+
+        QString("<div>error code %1</div><div>address：%2</div></FONT>").arg(errCode).arg(errAdr),
+        QMessageBox::Ok);
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+
+    //register handled exception function
+    SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)ApplicationCrashHandler);
 
     // thread create
     DataCollector* threadCollector = new DataCollector();
@@ -66,7 +92,7 @@ int main(int argc, char *argv[])
     //
     QtWebEngine::initialize();
 
-    //
+    // setting
     app.setOrganizationName("BJFU");
     app.setOrganizationDomain("12-4A.com");
     app.setApplicationName("MBC Software");
@@ -85,7 +111,7 @@ int main(int argc, char *argv[])
     // after load qml
     QObject *root = engine.rootObjects()[0];
     root->installEventFilter(&qmlKey);
-    // log
+    // log handler
 //    qInstallMessageHandler(myMessageOutput);
     //
     QObject::connect(threadLidar, SIGNAL(distReady(QString)), threadCollector, SLOT(update(QString)));

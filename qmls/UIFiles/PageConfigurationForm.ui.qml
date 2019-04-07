@@ -56,7 +56,7 @@ Page {
                 width: parent.width
                 height: 100
                 rowSpacing: 5
-                columnSpacing: 15
+                columnSpacing: 13
                 topPadding: 10
 
                 flow: Grid.TopToBottom
@@ -69,7 +69,7 @@ Page {
 
                     width: parent.width / 5
                     height: 40
-                    font.pointSize: 10
+                    font.pointSize: 9
                 }
                 Label {
                     id: label3
@@ -78,7 +78,7 @@ Page {
                     topPadding: 12
                     width: parent.width / 5
                     height: 40
-                    font.pointSize: 10
+                    font.pointSize: 9
                 }
                 ComboBox {
                     id: cmbDistance
@@ -103,7 +103,7 @@ Page {
                 height: 100
                 leftPadding: 10
                 rowSpacing: 5
-                columnSpacing: 20
+                columnSpacing: 15
                 flow: Grid.TopToBottom
                 CheckBox {
                     id: chbDebug
