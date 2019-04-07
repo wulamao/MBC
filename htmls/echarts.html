@@ -223,7 +223,13 @@
             myChart.setOption(option);
             myChart.hideLoading();
         }
-
+        //去除默认的鼠标事件
+        document.oncontextmenu = function () { return false; };
+        //新加上鼠标右击事件
+        myChart.on('contextmenu', function (params) {
+           alert("右键事件");
+           console.log(params);
+        });
 
         //$.getJSON("../data/life-expectancy-table.json", function (_data) { });
 
