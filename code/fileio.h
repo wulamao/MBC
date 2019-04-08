@@ -22,6 +22,8 @@ public slots:
     void setText(QString text);
     void savefile(QString dir, QString text);
     void openfile(QString dir);
+    void base64ToImage(QString bytearray,QString savePath);
+    void saveData(QString base64,QString savePath);
 signals:
     void sourceChanged(QUrl arg);
     void textChanged(QString arg);

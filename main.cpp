@@ -158,20 +158,11 @@ int main(int argc, char *argv[])
     QObject::connect(threadLidar, SIGNAL(distReady(QString)), threadCollector, SLOT(update(QString)));
     //get QML item
     QObject* configView = findClindByObjectNameFromQmlEngine(&engine,"configView");
-    QObject::connect(configView, SIGNAL(saveDataSignal(QString,QString)), threadCollector, SLOT(saveData(QString,QString)));
-//    QObject::connect(configView, SIGNAL(startRecord()), threadCollector, SLOT(startRecord()),Qt::QueuedConnection);
-//    QObject::connect(configView, SIGNAL(startRecord()), threadLidar, SLOT(startRecord()),Qt::QueuedConnection);
-//    QObject::connect(configView, SIGNAL(stopRecord()), threadCollector, SLOT(stopRecord()),Qt::QueuedConnection);
-//    QObject::connect(configView, SIGNAL(stopRecord()), threadLidar, SLOT(stopRecord()),Qt::QueuedConnection);
-
+    QObject::connect(configView, SIGNAL(saveDataSignal(QString,QString)), io, SLOT(saveData(QString,QString)));
     QObject* openDialog = findClindByObjectNameFromQmlEngine(&engine,"openDialog");
     QObject::connect(openDialog, SIGNAL(importSignal(QString)), io, SLOT(openfile(QString)));
     QObject* saveDialog = findClindByObjectNameFromQmlEngine(&engine,"saveDialog");
     QObject::connect(saveDialog, SIGNAL(expertSignal(QString,QString)), io, SLOT(savefile(QString,QString)));
-
-    //QObject* chatView = findClindByObjectNameFromQmlEngine(&engine,"chatView");
-    //QObject::connect(io, SIGNAL(textChanged(QString)), chatView, SLOT(chatView.readFile(QString)));
-
 
     // log handler
 //    qInstallMessageHandler(myMessageOutput);

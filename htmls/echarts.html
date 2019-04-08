@@ -34,6 +34,10 @@
                 backend.clearSignal.connect(function(arg) {
                     clearPoint();
                 });
+                backend.saveImageSignal.connect(function(arg) {
+                    saveAsChart();
+                });
+
             });
         }
 
@@ -210,13 +214,25 @@
             myChart.hideLoading();
         }
 
-        function clearPoint() {
+        //chartId is "chart"
+        function saveAsChart() {
             //var img = new Image();
             //img.src = myChart.getDataURL({
                 //pixelRatio: 2,
                 //backgroundColor: '#fff'
             //});
-            //backend.test(img)
+            var url = myChart.getConnectedDataURL({
+                pixelRatio: 5,
+                backgroundColor: '#fff',
+                excludeComponents:[
+                'toolbox',
+                ],
+                type:'png',//'jpeg',
+            });
+            backend.getImage(url,'png')
+        }
+
+        function clearPoint() {
             myChart.showLoading();
             myChart.clear();
             data.splice(0, data.length)
@@ -227,7 +243,7 @@
         document.oncontextmenu = function () { return false; };
         //新加上鼠标右击事件
         myChart.on('contextmenu', function (params) {
-           alert("右键事件");
+           alert("TODO");
            console.log(params);
         });
 

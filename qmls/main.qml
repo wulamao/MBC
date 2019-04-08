@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.5
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs 1.3
 import Qt.labs.platform 1.1
 //import org.example.io 1.0
 
@@ -31,9 +31,11 @@ ApplicationWindow {
             FileDialog {
                 id: openDialog
                 objectName: "openDialog"
+                nameFilters: ["data file (*.txt *.csv)","All files (*)"]
+                fileMode: FileDialog.OpenFiles
                 signal importSignal(string dir)
                 onAccepted: {
-                    importSignal(openDialog.file)
+                    importSignal(openDialog.files)
                 }
             }
             FileDialog {
@@ -55,8 +57,9 @@ ApplicationWindow {
             }
             //
             btnSaveData.onClicked : {
-                //threadCollector.saveData(chatView.getData(),txtInputName.text)
-                saveDataSignal(chatView.getData(),txtInputName.text)
+                var time = Qt.formatDateTime(new Date(), "[yyyy-MM-dd][hh-mm-ss]")
+                var savePath = "../MBC/data/"+time+txtInputName.text+".txt"
+                saveDataSignal(chatView.getData(),savePath)
             }
 
             btnScreenShot.onClicked: {

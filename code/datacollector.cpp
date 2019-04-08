@@ -21,8 +21,8 @@ DataCollector::DataCollector() {
     QObject::connect(m_serial, SIGNAL(readyRead()), this, SLOT(readData()));
     QObject::connect(m_timer, SIGNAL(timeout()), this, SLOT(sendData()));
     //
-    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
-    qDebug() << "QTimerThread:" << threadText;
+//    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+//    qDebug() << "QTimerThread:" << threadText;
 }
 DataCollector::~DataCollector() {
     if(!m_serial) {
@@ -113,28 +113,7 @@ void DataCollector::stopRecord() {
     m_timer->stop();
 }
 
-//
-#include <QFile>
-#include <QDateTime>
-#include <QMessageBox>
-#include <QDir>
 
-void DataCollector::saveData(QString data,QString name) {
-    QDateTime time = QDateTime::currentDateTime();
-    QString str = time.toString("[yy-MM-dd_hh-mm-ss]");
-    QString dir = QDir::currentPath();
-    QFile file("../MBC/data/"+str+name+".txt");
-
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        qDebug() << dir+":open file error";
-        return;
-    }
-
-    file.write(data.toUtf8());
-    file.close();
-    qDebug() << "Data saved:" << "../MBC/data/"+str+name+".txt";
-}
 
 QStringList DataCollector::getSerInfo()
 {

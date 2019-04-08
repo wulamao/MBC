@@ -37,7 +37,6 @@ public slots:
     // exposure this function to QML as well
     void startRecord();
     void stopRecord();
-    void saveData(QString data,QString name);
     QStringList getSerInfo();
 
     void test() {

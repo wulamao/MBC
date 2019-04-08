@@ -78,8 +78,48 @@ void FileIO::savefile(QString dir, QString text) {
 }
 
 void FileIO::openfile(QString dir) {
-    m_source = dir;
-    read();
+    QStringList sections = dir.split(QRegExp("[,]"));
+    for (QStringList::iterator it = sections.begin(); it != sections.end(); ++it)
+    {
+        qDebug() << *it;
+        m_source = *it;
+        read();
+    }
 }
 
+#include <QPixmap>
+void FileIO::base64ToImage(QString base64,QString savePath)
+{
+    QByteArray Ret_bytearray;
+    //qDebug() <<"base64 :" << base64 ;
+    Ret_bytearray = QByteArray::fromBase64(base64.toLatin1());
+    QBuffer buffer(&Ret_bytearray);
+    buffer.open(QIODevice::WriteOnly);
+    QPixmap imageresult;
+    imageresult.loadFromData(Ret_bytearray);
+    if(savePath != "")
+    {
+        qDebug() <<"saved :" +savePath<<imageresult.save(savePath);
 
+    }
+}
+
+//
+#include <QFile>
+#include <QDateTime>
+#include <QMessageBox>
+#include <QDir>
+
+void FileIO::saveData(QString data,QString savePath) {
+    QFile file(savePath);
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        qDebug() << QString(savePath+":open file error");
+        return;
+    }
+
+    file.write(data.toUtf8());
+    file.close();
+    qDebug() << "Data saved:" << savePath;
+}
