@@ -17,7 +17,6 @@ ApplicationWindow {
 
     property int index: 1
 
-
     Drawer {
         id: drawer
         width: parent.width * 0.4
@@ -168,6 +167,7 @@ ApplicationWindow {
         if(index === 1) {
             index = 2
         }
+        monitorView.canvas.requestPaint();
     }
     function onSKeyESCPress(){
         console.log("onSKeyDESCPress")
