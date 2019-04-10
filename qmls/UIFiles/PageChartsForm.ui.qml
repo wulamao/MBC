@@ -14,13 +14,12 @@ Page {
     title: qsTr("Charts")
     id: eCharts
 
-
-
     Column {
         anchors.fill: parent
         Item {
+            id: nameItem
             width: parent.width
-            height: 450
+            height: parent.height - debugView.height
             //            color: "#222222"
             WebEngineView {
                 id: webEngineView
@@ -29,11 +28,12 @@ Page {
         }
 
         Rectangle {
+            id: debugView
             width: parent.width
             height: 150
             color: "#222222"
             ScrollView {
-                id: scrollView
+                id: scrollVie
                 anchors.fill: parent
                 clip: true
 
@@ -46,7 +46,6 @@ Page {
                     wrapMode: Text.NoWrap
                     readOnly: true
                     //text: qsTr("You are on the Charts page.")
-
                 }
             }
         }

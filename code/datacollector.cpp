@@ -99,14 +99,14 @@ void DataCollector::sendData() {
         //qDebug() << *m_qlist;
         m_qlist->clear();
         QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
-        qDebug() << "collectorThread:" << threadText;
+        //qDebug() << "collectorThread:" << threadText;
     }
 }
 
 void DataCollector::startRecord() {
     m_timer->start(500);
-    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
-    qDebug() << "collectorThread:" << threadText;
+//    QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+//    qDebug() << "collectorThread:" << threadText;
 }
 
 void DataCollector::stopRecord() {

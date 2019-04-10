@@ -165,8 +165,8 @@ void Lidar::triggerTest() {
 bool Lidar::capture()
 {
     u_result ans;
-    rplidar_response_measurement_node_t nodes[8192];
-    float dist[8192];
+    rplidar_response_measurement_node_t nodes[1024];
+    float dist[1024];
     size_t   count = _countof(nodes);
     if(m_drv==nullptr) return false;
     else {
@@ -205,14 +205,14 @@ bool Lidar::capture()
     }
 
     QString threadText = QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
-    qDebug() << "lidarThread:" << threadText;
+    //qDebug() << "lidarThread:" << threadText;
 
     return true;
 }
 
 
 void Lidar::startRecord() {
-    m_timer->start(200);
+    m_timer->start(100);
 }
 
 void Lidar::stopRecord() {

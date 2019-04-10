@@ -4,16 +4,15 @@ import "../UIFiles"
 
 AnimationItem {
     property alias canvas: canvas
-
+    width: 1000
+    height: 600
     PageMonitorForm {
-        width: 1000
-        height: 600
 
-
+        anchors.fill: parent
         Canvas {
             id:canvas
-            width: parent.width
-            height: parent.height
+            anchors.fill: parent
+
             property color strokeStyle:  Qt.darker(fillStyle, 1.4)
             property color fillStyle: "#b40000" // red
             property int lineWidth: 4

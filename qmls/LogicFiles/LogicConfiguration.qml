@@ -11,7 +11,6 @@ PageConfigurationForm {
     property bool openedDist: false
     property bool openedCltr: false
 
-
     Settings {
         id: settings
         property int cmbDist: 0
@@ -41,7 +40,6 @@ PageConfigurationForm {
         var portCltr = cmbCollector.currentText
         console.log("openedDist:"+openedDist)
         console.log("openedCltr:"+openedCltr)
-
         console.log(portDist,portCltr,elmDist.checked,elmCltr.checked)
         //
         if(elmDist.checked === true) {

@@ -11,10 +11,12 @@ AnimationItem {
     property alias chart: chart
     property alias someObject: someObject
 
+    width: 1000
+    height: 600
+
     PageChartsForm {
         id: chart
-        width: 1000
-        height: 600
+        anchors.fill: parent
 
         QtObject {
             id: someObject
@@ -83,10 +85,11 @@ AnimationItem {
             var pointf = points.map(parseFloat)
             var pointOK = new Array
             pointOK = arrayTo3d(pointf,insert)
-            pointOK.forEach(function(item) {
-                chart.textEdit.append(item)
-            })
+//            pointOK.forEach(function(item) {
+//                chart.textEdit.append(item)
+//            })
             console.log(pointOK)
+            chart.textEdit.append(pointOK)
             someObject.someSignal(pointOK);
          } else {
             var test = new Array

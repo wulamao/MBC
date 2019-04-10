@@ -3,7 +3,8 @@ import QtQuick.Controls 2.2
 import "../LogicFiles"
 
 Page {
-    width: 383
+    id: configForm
+    width: 600
     height: 480
 
     property alias cmbDistance: cmbDistance
@@ -27,16 +28,17 @@ Page {
 
     title: qsTr("Configuration")
     ScrollView {
-        visible: true
         anchors.fill: parent
+        visible: true
 
         Column {
-            spacing: 0
             anchors.fill: parent
+            spacing: 0
+
             Rectangle {
                 id: tips
                 color: "#dddddd"
-                width: parent.width
+                width: configForm.width
                 height: 30
 
                 Text {
@@ -47,7 +49,7 @@ Page {
             }
             Rectangle {
                 id: colorBar
-                width: parent.width
+                width: configForm.width
                 height: 5
                 color: "#123456"
             }
@@ -56,7 +58,7 @@ Page {
                 rows: 2
                 columns: 3
 
-                width: parent.width
+                width: configForm.width
                 height: 100
                 rowSpacing: 5
                 columnSpacing: 13
@@ -70,7 +72,7 @@ Page {
                     leftPadding: 15
                     topPadding: 12
 
-                    width: parent.width / 5
+                    width: configForm.width / 4
                     height: 40
                     font.pointSize: 9
                 }
@@ -79,30 +81,34 @@ Page {
                     text: qsTr("Collector")
                     leftPadding: 15
                     topPadding: 12
-                    width: parent.width / 5
+                    width: configForm.width / 4
                     height: 40
                     font.pointSize: 9
                 }
                 ComboBox {
                     id: cmbDistance
+                    width: configForm.width / 4
                     model: 20
                 }
                 ComboBox {
                     id: cmbCollector
+                    width: configForm.width / 4
                     model: 20
                 }
                 Switch {
                     id: elmDist
+                    width: configForm.width / 4
                 }
                 Switch {
                     id: elmCltr
+                    width: configForm.width / 4
                 }
             }
 
             Grid {
                 rows: 2
                 columns: 3
-                width: parent.width
+                width: configForm.width
                 height: 100
                 leftPadding: 10
                 rowSpacing: 5
@@ -110,28 +116,34 @@ Page {
                 flow: Grid.TopToBottom
                 CheckBox {
                     id: chbDebug
+                    width: configForm.width / 4
                     text: qsTr("DebugMode")
                 }
                 CheckBox {
                     id: checkBox2
+                    width: configForm.width / 4
                     text: qsTr("SomeMode")
                 }
                 CheckBox {
                     id: checkBox3
+                    width: configForm.width / 4
                     text: qsTr("AddRTC")
                 }
                 CheckBox {
                     id: checkBox
+                    width: configForm.width / 4
                     text: qsTr("AddLine")
                 }
 
                 CheckBox {
                     id: checkBox4
+                    width: configForm.width / 4
                     text: qsTr("State1")
                 }
 
                 CheckBox {
                     id: checkBox5
+                    width: configForm.width / 4
                     text: qsTr("State2")
                 }
             }
@@ -139,7 +151,7 @@ Page {
             Grid {
                 rows: 2
                 columns: 4
-                width: parent.width
+                width: configForm.width
                 leftPadding: 25
                 height: 60
                 rowSpacing: 5
@@ -148,7 +160,7 @@ Page {
                 flow: Grid.TopToBottom
                 Label {
                     id: label1
-                    width: parent.width / 6
+                    width: configForm.width / 6
                     topPadding: 3
                     height: 25
                     text: qsTr("Mark")
@@ -156,7 +168,7 @@ Page {
 
                 Label {
                     id: label
-                    width: parent.width / 6
+                    width: configForm.width / 6
                     topPadding: 3
                     height: 25
                     text: qsTr("Name")
@@ -164,7 +176,7 @@ Page {
 
                 TextInput {
                     id: txtInputMark
-                    width: parent.width / 5
+                    width: configForm.width / 5
                     topPadding: 3
                     height: 25
                     color: "#615a5a"
@@ -174,7 +186,7 @@ Page {
 
                 TextInput {
                     id: txtInputName
-                    width: parent.width / 5
+                    width: configForm.width / 5
                     topPadding: 3
                     height: 25
                     color: "#615a5a"
@@ -184,7 +196,7 @@ Page {
 
                 Label {
                     id: labelSample
-                    width: parent.width / 6
+                    width: configForm.width / 6
                     height: 25
                     text: qsTr("Sample(ms)")
                     topPadding: 3
@@ -192,7 +204,7 @@ Page {
 
                 Label {
                     id: label5
-                    width: parent.width / 6
+                    width: configForm.width / 6
                     height: 25
                     text: qsTr("None")
                     topPadding: 3
@@ -200,7 +212,7 @@ Page {
 
                 TextInput {
                     id: txtInputSample
-                    width: parent.width / 7
+                    width: configForm.width / 7
                     height: 25
                     color: "#615a5a"
                     text: qsTr("1000")
@@ -210,7 +222,7 @@ Page {
 
                 TextInput {
                     id: txtInputName1
-                    width: parent.width / 5
+                    width: configForm.width / 5
                     height: 25
                     color: "#615a5a"
                     text: qsTr("^_^")
@@ -223,41 +235,48 @@ Page {
                 rows: 3
                 columns: 3
                 leftPadding: 20
-                width: parent.width
+                width: configForm.width
                 height: 140
                 rowSpacing: 5
                 columnSpacing: 5
                 Button {
                     id: btnOK
+                    width: configForm.width / 4
                     text: qsTr("OK")
                 }
 
                 Button {
                     id: btnStart
+                    width: configForm.width / 4
                     text: qsTr("RecordStart")
                 }
 
                 Button {
                     id: btnStop
+                    width: configForm.width / 4
                     text: "RecordStop"
                 }
 
                 Button {
                     id: btnClear
+                    width: configForm.width / 4
                     text: qsTr("Clear")
                 }
 
                 Button {
                     id: btnExpert
+                    width: configForm.width / 4
                     text: qsTr("Expert")
                 }
 
                 Button {
                     id: btnImport
+                    width: configForm.width / 4
                     text: qsTr("Import")
                 }
                 Button {
                     id: btnHelp
+                    width: configForm.width / 4
                     text: qsTr("Help")
                     autoRepeat: false
                     highlighted: true
@@ -265,21 +284,23 @@ Page {
                 }
                 Button {
                     id: btnSaveData
+                    width: configForm.width / 4
                     text: qsTr("SaveData")
                 }
                 Button {
                     id: btnScreenShot
+                    width: configForm.width / 4
                     text: qsTr("ScreenShot")
                 }
             }
             Rectangle {
                 id: tips1
                 color: "#dddddd"
-                width: parent.width
+                width: configForm.width
                 height: 300
 
                 Text {
-                    width: 344
+                    width: configForm.with - 40
                     height: 120
                     color: "#000000"
                     text: qsTr("You got me, wow! ^_^
@@ -296,12 +317,12 @@ Have fun! via W.")
 
                 TextEdit {
                     id: textMemo
-                    x: 20
-                    y: 14
-                    width: 344
+                    width: configForm.with - 40
                     height: 139
                     text: "MemoZy"
                     font.pixelSize: 12
+                    leftPadding: 10
+                    topPadding: 10
                 }
             }
         }

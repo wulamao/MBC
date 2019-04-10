@@ -1,4 +1,4 @@
-# ./mnt/c/Users/surface/Desktop/qml/MBroadCast/MBC/publish.sh
+# cd /mnt/c/Users/surface/Desktop/qml/MBroadCast/MBC ; ./publish.sh
 
 cp -r ./configuration /mnt/c/Users/surface/Desktop/Ver1/MBC
 cp -r ./figure /mnt/c/Users/surface/Desktop/Ver1/MBC
