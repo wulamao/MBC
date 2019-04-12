@@ -6,25 +6,45 @@
     <script src="../js/echarts.min.js"></script>
     <script src="../js/echarts-gl.min.js"></script>
     <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/dat.gui.min.js"></script>
+    <style>
+        #datGui {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+    }
+    </style>
 </head>
 <body>
+    <!--<div class = 'moveGUI'></div>-->
     <div id="chart" style="height:400px;"></div>
     <script type="text/javascript" src="../js/qwebchannel.js"></script>
     <script type="text/javascript">
+
         // div height 100% doesn't work, what's its parent?
         // 图表渲染的容器对象
         var chartContainer = document.getElementById("chart");
         var myChart = echarts.init(chartContainer);
+        var gui = new dat.GUI( { autoPlace: true } );
+        gui.domElement.id = 'datGui';
+        //var customContainer = $('.moveGUI').append($(gui.domElement));
 
         window.onresize = function(){
-
             var obj=document.getElementById("chart")
             obj.style.height = String(document.documentElement.clientHeight-30)+'px'
             obj.style.overflow = "hidden"
-
             myChart.resize();
-
         }
+
+        var FizzyText = function() {
+          this.message = 'dat.gui';
+          this.speed = 0.8;
+          this.displayOutline = false;
+          this.testFunction = function() {  alert("testFunction") };
+          // Define render logic ...
+        };
+
+        var text = new FizzyText();
 
         window.onload = function()
         {
@@ -42,8 +62,14 @@
                 backend.saveImageSignal.connect(function(arg) {
                     saveAsChart();
                 });
-
             });
+
+            gui.add(text, 'message');
+            gui.add(text, 'speed', -5, 5);
+            gui.add(text, 'displayOutline');
+            gui.add(text, 'testFunction');
+
+            gui.close()
         }
 
         var data = [["Distance","RSSI","Mark"],]
@@ -58,7 +84,7 @@
         var option = {
             //backgroundColor: '#dddddd',
             visualMap: [{
-               top: 10,
+               top: 30,
                tooltip: {trigger: 'item'},
                type: 'piecewise',
                //calculable: true,
@@ -70,8 +96,11 @@
                show: true,
                inRange: {
                    color: {
-                        '0':'#ff4000', '1':'#ffbf00', '2':'#bfff00', '3':'#40ff00', '4':'#00ffbf',
-                        '5':'#00bfff', '6':'#0040ff', '7':'#7f00ff', '8':'#ff00ff', '9':'#ff0080'
+                        '0':'#ff4000', '1':'#ffbf00',
+                        '2':'#bfff00', '3':'#40ff00',
+                        '4':'#00ffbf', '5':'#00bfff',
+                        '6':'#0040ff', '7':'#7f00ff',
+                        '8':'#ff00ff', '9':'#ff0080'
                    }
                },
                textStyle: {
@@ -130,6 +159,7 @@
                     data: ['Data']
                 },
                 toolbox: {
+                    left: 'center',
                     show: true,
                     feature: {
                         mark: { show: true },
