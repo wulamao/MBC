@@ -96,6 +96,7 @@ AnimationItem {
             test.push([Math.floor(Math.random()*10),Math.floor(Math.random()*10),insert]);
             chart.textEdit.append("debug mode >>")
             // noted that 'test' is a list whose element is a list
+//            console.log(test)
             someObject.someSignal(test)
          }
     }

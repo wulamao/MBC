@@ -138,7 +138,7 @@ ApplicationWindow {
                 if(configView.txtInputMark.text !== '') {
                         chatView.updateChart(configView.chbDebug.checked,
                                              chatView.boom,
-                                             configView.txtInputMark.text)
+                                             String(configView.txtInputMark.text))
                                              //parseInt(configView.txtInputMark.text))
                 }
             }

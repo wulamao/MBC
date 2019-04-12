@@ -180,7 +180,7 @@ Page {
                     topPadding: 3
                     height: 25
                     color: "#615a5a"
-                    text: qsTr("0")
+                    text: qsTr("example")
                     font.pixelSize: 12
                 }
 
