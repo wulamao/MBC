@@ -10,8 +10,8 @@
     <style>
         #datGui {
         position: absolute;
-        top: 2px;
-        left: 2px;
+        top: 15px;
+        right: 120px;
     }
     </style>
 </head>
@@ -27,7 +27,8 @@
         var myChart = echarts.init(chartContainer);
         var gui = new dat.GUI( { autoPlace: true } );
         gui.domElement.id = 'datGui';
-        //var customContainer = $('.moveGUI').append($(gui.domElement));
+        //var customContainer = document.getElementById('datGui');
+        //customContainer.appendChild(gui.domElement);
 
         window.onresize = function(){
             var obj=document.getElementById("chart")
@@ -36,15 +37,28 @@
             myChart.resize();
         }
 
+
+        var tips = []
+        function updateTips(item) {
+            var markTip = item[2]
+            if(tips.indexOf(markTip)===-1 && tips.length <= 10) {
+                tips.push(markTip);
+                myChart.setOption(option);
+            }
+        }
+
         var FizzyText = function() {
           this.message = 'dat.gui';
           this.speed = 0.8;
           this.displayOutline = false;
-          this.testFunction = function() {  alert("testFunction") };
+          this.testFunction = function() {
+            updateTips([0,0,String(Math.floor(Math.random()*15))]);
+          };
           // Define render logic ...
         };
 
         var text = new FizzyText();
+        gui.remember(text);
 
         window.onload = function()
         {
@@ -80,11 +94,11 @@
             ytext : 'Mark',
             ztext : 'RSSI',
         }
-        var tips = ['0','1','2','3','4','5','6','7','8','9']
+
         var option = {
             //backgroundColor: '#dddddd',
             visualMap: [{
-               top: 30,
+               top: 10,
                tooltip: {trigger: 'item'},
                type: 'piecewise',
                //calculable: true,
@@ -95,13 +109,13 @@
                categories: tips,
                show: true,
                inRange: {
-                   color: {
-                        '0':'#ff4000', '1':'#ffbf00',
-                        '2':'#bfff00', '3':'#40ff00',
-                        '4':'#00ffbf', '5':'#00bfff',
-                        '6':'#0040ff', '7':'#7f00ff',
-                        '8':'#ff00ff', '9':'#ff0080'
-                   }
+                   color: [
+                        '#ff4000', '#ffbf00',
+                        '#bfff00', '#40ff00',
+                        '#00ffbf', '#00bfff',
+                        '#0040ff', '#7f00ff',
+                        '#ff00ff', '#ff0080'
+                        ]
                },
                textStyle: {
                    color: '#000'
@@ -141,7 +155,7 @@
             yAxis3D: {
                         name: config.ytext,
                         type: 'category',
-                        data: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+                        tips: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
                       },
             zAxis3D: {name: config.ztext},
             dataset: {
@@ -244,6 +258,7 @@
         function refresh(arg) {
             myChart.showLoading();
             arg.forEach(function(item) {
+                updateTips(item)
                 data.push(item)
             })
             myChart.setOption(option);
