@@ -102,11 +102,19 @@ AnimationItem {
     }
 
     function readFile(txtData) {
+        var f = function(e) {
+            e[0] = parseFloat(e[0])
+            e[1] = parseFloat(e[1])
+            return e
+        }
         var str = txtData.replace(/\n/g,',');
+        str = str.replace(/\r/g,'');
         var points = String(str).split(',')
-        var pointf = points.map(parseFloat)
+        var pointf = arrayTo3dEx(points)
+
         var pointOK = new Array
-        pointOK = arrayTo3dEx(pointf)
+        pointOK = pointf.map(f)
+
         someObject.someSignal(pointOK);
     }
 
@@ -122,7 +130,11 @@ AnimationItem {
     function arrayTo3dEx(arr){
         var result = new Array
         for(var i=0;i<arr.length-2;i+=3){
-            result.push([(arr)[i],(arr)[i+1],String((arr)[i+2])]);
+            if((arr)[i] === ''|| (arr)[i+1] === '' || (arr)[i+2] === '' ||
+                    isNaN((arr)[i]) || isNaN((arr)[i+1]))
+                continue;
+            result.push([(arr)[i],(arr)[i+1],qsTr(String((arr)[i+2]))]);
+            //console.log([(arr)[i],(arr)[i+1],qsTr(String((arr)[i+2]))])
         }
         return result;
     }

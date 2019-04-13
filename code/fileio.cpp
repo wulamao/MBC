@@ -24,7 +24,6 @@ void FileIO::read()
     if(file.open(QIODevice::ReadOnly)) {
         QTextStream stream(&file);
         m_text = stream.readAll();
-        //qDebug() << m_text;
         emit textChanged(m_text);
     }
 }

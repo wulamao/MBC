@@ -57,7 +57,8 @@
         ]
         var colorTips = {}
         function updateTips(item) {
-            var markTip = item[2].toString()
+            if(item == null) return
+            var markTip = ''+item[2]
             if(tips.indexOf(markTip)===-1 && tips.length < 10) {
                 tips.push(markTip);
                 colorTips[markTip] = colors[tips.indexOf(markTip)]
@@ -76,6 +77,13 @@
                 description += i + " : " + obj[i] + "\n";
             }
             alert(description);
+        }
+
+        function clearObj(obj) {
+            var description = "";
+            for (var i in obj) {
+                delete obj[i];
+            }
         }
 
 
@@ -121,13 +129,11 @@
 
 
         var option = {
-            legend: {
-            },
             visualMap: [{
                top: 10,
                tooltip: {trigger: 'item'},
                type: 'piecewise',
-               dimension: 2,// 'Mark'
+               dimension: 2,
                categories: tips,
                inRange: {
                     color: colorTips,
@@ -272,6 +278,7 @@
 
         function refresh(arg) {
             myChart.showLoading();
+            //alert(arg)
             arg.forEach(function(item) {
                 updateTips(item)
                 data.push(item)
@@ -304,7 +311,7 @@
             myChart.clear();
             data.splice(0, data.length)
             tips.splice(0, tips.length)
-            colorTips.splice(0, colorTips.length)
+            clearObj(colorTips)
             myChart.setOption(option);
             myChart.hideLoading();
         }
